@@ -49,7 +49,7 @@
     <!--操作按钮-->
     <script type="text/html" id="barDemo">
   		<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-  		<a class="layui-btn layui-btn-xs" lay-event="edit" onclick="x_admin_show('编辑','member-edit.html',600,400)">编辑</a>
+  		<a class="layui-btn layui-btn-xs" lay-event="edit" >编辑</a>
   		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" onclick="member_del(this,'要删除的id')">删除</a>
 		</script>
 		
@@ -165,7 +165,8 @@
 		              layer.msg('已删除!',{icon:1,time:1000});
           		});
 				    } else if(obj.event === 'edit'){
-				      layer.alert('编辑行：<br>'+ JSON.stringify(data));
+//				      layer.alert('编辑行：<br>'+ JSON.stringify(data));
+								x_admin_show('编辑','member-edit.html',data.id,600,400);
 				    }
 			  });
 			  
