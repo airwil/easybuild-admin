@@ -170,7 +170,9 @@ function x_admin_show(title,url,id,w,h){
     if (title == null || title == '') {
         title=false;
     };
-    url=url+"?id="+id;
+    if(id!=null||id!=''){
+    	url=url+"?id="+id;
+    }
     if (url == null || url == '') {
         url="404.html";
     };

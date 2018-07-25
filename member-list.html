@@ -27,12 +27,12 @@
     </div>
     <div class="x-body">
       <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so">
+        <div class="layui-form layui-col-md12 x-so">
           <input class="layui-input" placeholder="开始日" name="start" id="start">
           <input class="layui-input" placeholder="截止日" name="end" id="end">
           <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-          <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-        </form>
+          <button  id="searchBtn" class="layui-btn"  data-type="reload"><i class="layui-icon">&#xe615;</i></button>
+        </div>
       </div>
       <xblock class="demoTable">
         <button class="layui-btn layui-btn-danger" data-type="delAll"><i class="layui-icon"></i>批量删除</button>
@@ -50,7 +50,7 @@
     <script type="text/html" id="barDemo">
   		<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
   		<a class="layui-btn layui-btn-xs" lay-event="edit" >编辑</a>
-  		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" onclick="member_del(this,'要删除的id')">删除</a>
+  		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 		</script>
 		
     <script>
@@ -62,10 +62,20 @@
 					id:'idTest',
 					elem: '#test',
 					url: 'test.json',
-					where: {//搜索参数
-						'coldNum':"hhh",
-//						'isUsed':$("#isUsedId").val()
-					},
+//					method:'get',//默认get请求
+//					contentType:'application/json;charset=utf-8',//参数格式
+//					where: {'coldNum':"hhh"},//搜索参数
+//					request: {//自定义分页请求参数的名称
+//					  pageName: 'page',//页码的参数名称，默认：page
+//					  limitName: 'rows' //每页数据量的参数名，默认：limit
+//					},
+//					response: {//自定义返回的数据格式
+//					  statusName: 'status' //数据状态的字段名称，默认：code
+//					  ,statusCode: 200 //成功的状态码，默认：0
+//					  ,msgName: 'hint' //状态信息的字段名称，默认：msg
+//					  ,countName: 'total' //数据总数的字段名称，默认：count
+//					  ,dataName: 'rows' //数据列表的字段名称，默认：data
+//					}
 					page: true,
 					cols: [
 						[{type:'checkbox'},
@@ -151,7 +161,8 @@
 		                url: "ddddd",
 		                type: "POST",
 		                data:{"id":data.id},
-		                dataType: "text",
+		                contentType:'application/json;charset=utf-8',
+		                dataType: "json",
 		                success: function(data){
 		                    if(data.state==1){
 		                        layer.close(index);
@@ -165,15 +176,29 @@
 		              layer.msg('已删除!',{icon:1,time:1000});
           		});
 				    } else if(obj.event === 'edit'){
-//				      layer.alert('编辑行：<br>'+ JSON.stringify(data));
 								x_admin_show('编辑','member-edit.html',data.id,600,400);
 				    }
 			  });
 			  
 				
+				var $=layui.$,active={
+					 
+				}
 				
 			
 				var $ = layui.$, active = {
+						reload: function(){
+					      var start = $('#start').val();
+					      //执行重载
+					      table.reload('idTest', {
+					        page: {
+					          curr: 1 //重新从第 1 页开始
+					        }
+					        ,where: {
+					           'startDate':start
+					        }
+					      });
+						},
 				    //复选框删除
 				    delAll: function(){ 
 				    	//获取选中数据
@@ -189,8 +214,9 @@
 			            $.ajax({
 			                url: "test.json",
 			                type: "POST",
-			                data:{ids:ids},
-			                dataType: "text",
+			                data:{'ids':ids},
+			                contentType:'application/json;charset=utf-8',
+		                	dataType: "json",
 			                success: function(data){
 			                    if(data.state==1){
 			                        layer.close(index);
@@ -209,8 +235,15 @@
 				    }
 				};
 				
+				
+				
+				
 				//激活按钮
 				$('.demoTable .layui-btn').on('click', function(){
+			    var type = $(this).data('type');
+			    active[type] ? active[type].call(this) : '';
+			  });
+			  $('#searchBtn').on('click', function(){
 			    var type = $(this).data('type');
 			    active[type] ? active[type].call(this) : '';
 			  });
