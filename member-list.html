@@ -76,7 +76,8 @@
 //					  ,countName: 'total' //数据总数的字段名称，默认：count
 //					  ,dataName: 'rows' //数据列表的字段名称，默认：data
 //					}
-					page: true,
+//					even: true, //隔行背景
+					page: true,//分页
 					cols: [
 						[{type:'checkbox'},
 						{
@@ -180,12 +181,6 @@
 				    }
 			  });
 			  
-				
-				var $=layui.$,active={
-					 
-				}
-				
-			
 				var $ = layui.$, active = {
 						reload: function(){
 					      var start = $('#start').val();
